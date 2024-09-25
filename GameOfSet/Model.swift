@@ -8,95 +8,165 @@
 import Foundation
 
 
-struct Game {
+struct GameModel: Equatable {
     
     static let allCards: [Card] = generateAllCards()
     
     private static func generateAllCards() -> [Card] {
         var res: [Card] = []
-        for shape in FieldOfThree.allCases {
-            for color in FieldOfThree.allCases {
-                for texture in FieldOfThree.allCases {
-                    for number in FieldOfThree.allCases {
-                        res.append(Card(shape: shape, color: color, texture: texture, count: number))
-                    }
-                }
-            }
+        for _ in 0..<81 {
+            res.append(Card())
         }
         return res
     }
     
-    var allCards: [Card] = Game.allCards
+    var allCards: [Card] = GameModel.allCards
     
-    var layedOutCards: [Card] {
-        allCards.filter { $0.isLayedOut }
+    var inDeckCards: [Card] {
+        allCards.filter { $0.state == .inDeck }
+            .sorted { $0.drawOrder < $1.drawOrder }
     }
-
+    
+    var inGameCards: [Card] {
+        allCards.filter { $0.state == .inGame }
+            .sorted { $0.drawOrder < $1.drawOrder }
+    }
+    
     var chosenCards: [Card] {
-        layedOutCards.filter { $0.isChosen }
+        inGameCards.filter { $0.isChosen }
+    }
+    
+    var outOfGameCards: [Card] {
+        allCards.filter { $0.state == .outOfGame }
+    }
+    
+    var deckIsEmpty: Bool {
+        inDeckCards.isEmpty
     }
     
     mutating func chooseCard(_ card: Card) {
-        let index = findCardIndex(card)
-        if card.isChosen {
-            allCards[index].isChosen = false
-        } else {
-            switch chosenCards.count {
-            case ...1:
-                allCards[index].isChosen = true
-            case 2:
-                allCards[index].isChosen = true
-                if Card.areMatched(chosenCards) { onMatch() }
-                else { onNonMatch() }
-            default:
-                fatalError("wrong number of matched cards")
+        print("\(card.id)")
+        print("-----------------")
+        let index = card.id
+        
+        if chosenCards.count == 3 {
+            let indicies = chosenCards.map { $0.id }
+            if chosenCards.allSatisfy({$0.isMatched == .matched }) {
+                for index in indicies { allCards[index].state = .outOfGame }
+                addCards()
+            } else {
+                for index in indicies {
+                    allCards[index].isChosen = false
+                    allCards[index].isMatched = .nonMatched
+                }
             }
+            allCards[index].isChosen = true
+            return
+        }
+        
+        if allCards[index].isChosen { allCards[index].isChosen = false}
+        else { allCards[index].isChosen = true}
+        
+        if chosenCards.count == 3 {
+            let indicies = chosenCards.map { $0.id }
+            if Card.areMatched(chosenCards) {
+                for index in indicies { allCards[index].isMatched = .matched }
+            } else {
+                for index in indicies { allCards[index].isMatched = .falslyMatched }
+            }
+            
         }
     }
     
     mutating func onMatch() {
-        
+        while !chosenCards.isEmpty {
+            let card = chosenCards[0]
+            let index = card.id
+            allCards[index].isChosen = false
+            allCards[index].state = .outOfGame
+        }
+        addCards()
     }
     
     mutating func onNonMatch() {
+        while !chosenCards.isEmpty {
+            let card = chosenCards[0]
+            let index = card.id
+            allCards[index].isChosen = false
+        }
+    }
+    
+    mutating func addCards() {
+        if chosenCards.count == 3 {
+            let indicies = chosenCards.map { $0.id }
+            if chosenCards.allSatisfy({$0.isMatched == .matched }) {
+                for index in indicies { allCards[index].state = .outOfGame }
+                addCards()
+            }
+//            else {
+//                for index in indicies {
+//                    allCards[index].isChosen = false
+//                    allCards[index].isMatched = .nonMatched
+//                }
+//            }
+        }
         
+        if !deckIsEmpty {
+            for (i, card) in inDeckCards.enumerated() {
+                allCards[card.id].state = .inGame
+//                print(card.id)
+//                print(card.drawOrder)
+//                print("-----------------")
+                if i == 2 { break }
+            }
+            
+//            for (i, card) in inDeckCards.enumerated() {
+//                allCards[card.id].state = .inGame
+//                if i == 3 { break }
+//            }
+        }
     }
-    
-    private func findCardIndex(_ card: Card) -> Int {
-        let index = allCards.firstIndex{ $0.id == card.id }
-        return index!
-    }
-    
-    private func findCardIndex(_ cardId: Card.ID) -> Int {
-        let index = allCards.firstIndex{ $0.id == cardId }
-        return index!
-    }
-    
-    struct Card: Identifiable {
+
+    struct Card: Identifiable, Equatable {
+        
         let shape: FieldOfThree
         let color: FieldOfThree
         let texture: FieldOfThree
         let count: FieldOfThree
-        let id: [FieldOfThree]
+        let id: Int
+        var drawOrder: Int = 0
+        
+        private static var cardCount = 0
         
         private var isZeroCard: Bool {
             if (shape == .zero) && (color == .zero) && (texture == .zero) && (count == .zero) { return true }
             return false
         }
         
-        var isDrawn: Bool = false
-        var isMatched: Bool = false
+        var state: CardState = .inDeck
         var isChosen: Bool = false
-        var isLayedOut: Bool {
-            isDrawn && !isMatched
-        }
+        var isMatched: MatchState = .nonMatched
         
         init(shape: FieldOfThree, color: FieldOfThree, texture: FieldOfThree, count: FieldOfThree) {
             self.shape = shape
             self.color = color
             self.texture = texture
             self.count = count
-            self.id = [shape, color, texture, count]
+            self.id = shape.rawValue + color.rawValue * 3 + texture.rawValue * 8 + count.rawValue * 27
+        }
+        
+        init () {
+            var ternaryStr = String(Card.cardCount, radix: 3)
+            let shape = ternaryStr.popLast() ?? "0"
+            let color = ternaryStr.popLast() ?? "0"
+            let texture = ternaryStr.popLast() ?? "0"
+            let count = ternaryStr.popLast() ?? "0"
+            self.shape = FieldOfThree(rawValue: Int(String(shape))!)!
+            self.color = FieldOfThree(rawValue: Int(String(color))!)!
+            self.texture = FieldOfThree(rawValue: Int(String(texture))!)!
+            self.count = FieldOfThree(rawValue: Int(String(count))!)!
+            self.id = Card.cardCount
+            Card.cardCount += 1
         }
         
         static func +(lhs: Card, rhs: Card) -> Card {
@@ -108,18 +178,39 @@ struct Game {
         }
         
         static func areMatched(_ cards: [Card]) -> Bool {
-            precondition(cards.count == 3, "invalid number for match")
+            assert(cards.count == 3, "invalid number for match")
             return areMatched(card1: cards[0], card2: cards[1], card3: cards[2])
         }
     }
-
-    enum FieldOfThree: Int, CaseIterable {
-        case zero = 0, one, two
-        
-        static func +(lhs: FieldOfThree, rhs: FieldOfThree) -> FieldOfThree{
-            let newIntValue = (lhs.rawValue + rhs.rawValue) % 2
-            precondition([0, 1, 2].contains(newIntValue), "Invalid new value of FielfOfThree")
-            return FieldOfThree(rawValue: newIntValue)!
+    
+    enum CardState {
+        case inGame, inDeck, outOfGame
+    }
+    
+    enum MatchState {
+        case matched, nonMatched, falslyMatched
+    }
+    
+    init() {
+        assert(GameModel.allCards.count == 81, "Wrong number of cards")
+        for (i, j) in ((0..<81).shuffled()).enumerated() {
+            allCards[i].drawOrder = j
+            if j < 12 { allCards[i].state = .inGame }
+            
+//            allCards[i].drawOrder = i
+//            if i < 12 { allCards[i].state = .inGame }
         }
+        
+    }
+}
+
+
+enum FieldOfThree: Int, CaseIterable {
+    case zero = 0, one, two
+    
+    static func +(lhs: FieldOfThree, rhs: FieldOfThree) -> FieldOfThree{
+        let newIntValue = (lhs.rawValue + rhs.rawValue) % 3
+        assert([0, 1, 2].contains(newIntValue), "Invalid new value of FielfOfThree")
+        return FieldOfThree(rawValue: newIntValue)!
     }
 }
