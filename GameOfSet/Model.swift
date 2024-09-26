@@ -49,7 +49,6 @@ struct GameModel: Equatable {
     
 //    func that handles choosing new card
     mutating func chooseCard(_ card: Card) {
-        card.prettyPrint()
         let index = card.id
 
         if chosenCards.count == 3 {
@@ -120,10 +119,6 @@ struct GameModel: Equatable {
     
 //    Card structure
     struct Card: Identifiable, Equatable {
-        
-        func prettyPrint() {
-            print("\(shape.rawValue) \(color.rawValue) \(texture.rawValue) \(count.rawValue)")
-        }
         
 //        cards basic properties
         let shape: FieldOfThree
@@ -203,18 +198,11 @@ struct GameModel: Equatable {
 //            if j < 12 { allCards[i].state = .inGame }
 //        }
         
-        for (i, j) in ((0..<81)).enumerated() {
+        for (i, j) in ((0..<81).shuffled()).enumerated() {
             allCards[i].drawOrder = j
             if j < 12 { allCards[i].state = .inGame }
         }
         
-    }
-    
-    func prettyPrint() {
-        for card in inGameCards {
-            print(card, separator: "   ")
-        }
-        print("-------------")
     }
 }
 

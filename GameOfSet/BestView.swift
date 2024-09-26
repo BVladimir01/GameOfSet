@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+//HAS BUGS, NEED TO FIX!!!!!!!
 
 //struct that chooses best view for given number of items
 struct BestView<Item: Identifiable, ItemView: View>: View  {
