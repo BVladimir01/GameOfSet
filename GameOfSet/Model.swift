@@ -10,8 +10,10 @@ import Foundation
 
 struct GameModel: Equatable {
     
-    static let allCards: [Card] = generateAllCards()
+//    global copy of starting deck for every game
+    private static let allCards: [Card] = generateAllCards()
     
+//    func that generates it
     private static func generateAllCards() -> [Card] {
         var res: [Card] = []
         for _ in 0..<81 {
@@ -20,33 +22,33 @@ struct GameModel: Equatable {
         return res
     }
     
-    var allCards: [Card] = GameModel.allCards
-    
-    var inDeckCards: [Card] {
+//    every card of the game
+    private var allCards: [Card] = GameModel.allCards
+//    cards that are in the deck, sorted by drawing order
+    private var inDeckCards: [Card] {
         allCards.filter { $0.state == .inDeck }
             .sorted { $0.drawOrder < $1.drawOrder }
     }
-    
+//    cards that are on the tavble, sorted by draw order
     var inGameCards: [Card] {
         allCards.filter { $0.state == .inGame }
             .sorted { $0.drawOrder < $1.drawOrder }
     }
-    
-    var chosenCards: [Card] {
+//    cards, chosen by the player, that are on the table
+    private var chosenCards: [Card] {
         inGameCards.filter { $0.isChosen }
     }
-    
-    var outOfGameCards: [Card] {
+//    cards that went out of the game
+    private var outOfGameCards: [Card] {
         allCards.filter { $0.state == .outOfGame }
     }
-    
+//    bool property ot check end of the deck
     var deckIsEmpty: Bool {
         inDeckCards.isEmpty
     }
     
+//    func that handles choosing new card
     mutating func chooseCard(_ card: Card) {
-        print("\(card.id)")
-        print("-----------------")
         let index = card.id
         
         if chosenCards.count == 3 {
@@ -77,8 +79,8 @@ struct GameModel: Equatable {
             
         }
     }
-    
-    mutating func onMatch() {
+//    func that handles matching, when choosing a card
+    private mutating func onMatch() {
         while !chosenCards.isEmpty {
             let card = chosenCards[0]
             let index = card.id
@@ -87,66 +89,69 @@ struct GameModel: Equatable {
         }
         addCards()
     }
-    
-    mutating func onNonMatch() {
+//    func that handles false matching, when choosing a card
+    private mutating func onNonMatch() {
         while !chosenCards.isEmpty {
             let card = chosenCards[0]
             let index = card.id
             allCards[index].isChosen = false
         }
     }
-    
+//    func that add card from the deck to ingamecards
     mutating func addCards() {
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
             if chosenCards.allSatisfy({$0.isMatched == .matched }) {
                 for index in indicies { allCards[index].state = .outOfGame }
-                addCards()
             }
-//            else {
-//                for index in indicies {
-//                    allCards[index].isChosen = false
-//                    allCards[index].isMatched = .nonMatched
-//                }
-//            }
         }
-        
         if !deckIsEmpty {
             for (i, card) in inDeckCards.enumerated() {
                 allCards[card.id].state = .inGame
-//                print(card.id)
-//                print(card.drawOrder)
-//                print("-----------------")
                 if i == 2 { break }
             }
-            
-//            for (i, card) in inDeckCards.enumerated() {
-//                allCards[card.id].state = .inGame
-//                if i == 3 { break }
-//            }
         }
     }
 
+    
+//    Card structure
     struct Card: Identifiable, Equatable {
         
+//        cards basic properties
         let shape: FieldOfThree
         let color: FieldOfThree
         let texture: FieldOfThree
         let count: FieldOfThree
-        let id: Int
-        var drawOrder: Int = 0
         
+//        cards state in the game
+        fileprivate var state: CardState = .inDeck
+        var isChosen: Bool = false
+        var isMatched: MatchState = .nonMatched
+        
+//        cards id and drawing order
+        let id: Int
+        fileprivate var drawOrder: Int = 0
+        
+//        static counter for assigning ids
         private static var cardCount = 0
         
+//        checks if every property is zero
+//        helps in matching cards
         private var isZeroCard: Bool {
             if (shape == .zero) && (color == .zero) && (texture == .zero) && (count == .zero) { return true }
             return false
         }
-        
-        var state: CardState = .inDeck
-        var isChosen: Bool = false
-        var isMatched: MatchState = .nonMatched
-        
+//        overloading card addition to ease matching
+        static func +(lhs: Card, rhs: Card) -> Card {
+            return Card(shape: lhs.shape + rhs.shape, color: lhs.color + rhs.color, texture: lhs.texture + rhs.texture, count: lhs.count + rhs.count)
+        }
+//        match checker
+        static func areMatched(_ cards: [Card]) -> Bool {
+            assert(cards.count == 3, "invalid number for match")
+            return (cards[0] + cards[1] + cards[2]).isZeroCard
+        }
+
+//        init that allows to set every nondefault property
         init(shape: FieldOfThree, color: FieldOfThree, texture: FieldOfThree, count: FieldOfThree) {
             self.shape = shape
             self.color = color
@@ -154,7 +159,7 @@ struct GameModel: Equatable {
             self.count = count
             self.id = shape.rawValue + color.rawValue * 3 + texture.rawValue * 8 + count.rawValue * 27
         }
-        
+//        auto init
         init () {
             var ternaryStr = String(Card.cardCount, radix: 3)
             let shape = ternaryStr.popLast() ?? "0"
@@ -169,42 +174,31 @@ struct GameModel: Equatable {
             Card.cardCount += 1
         }
         
-        static func +(lhs: Card, rhs: Card) -> Card {
-            return Card(shape: lhs.shape + rhs.shape, color: lhs.color + rhs.color, texture: lhs.texture + rhs.texture, count: lhs.count + rhs.count)
+//        enum of cardstate
+        enum CardState {
+            case inGame, inDeck, outOfGame
+        }
+//        enum of match state
+        enum MatchState {
+            case matched, nonMatched, falslyMatched
         }
         
-        static func areMatched(card1: Card, card2: Card, card3: Card) -> Bool {
-            (card1 + card2 + card3).isZeroCard
-        }
-        
-        static func areMatched(_ cards: [Card]) -> Bool {
-            assert(cards.count == 3, "invalid number for match")
-            return areMatched(card1: cards[0], card2: cards[1], card3: cards[2])
-        }
     }
     
-    enum CardState {
-        case inGame, inDeck, outOfGame
-    }
     
-    enum MatchState {
-        case matched, nonMatched, falslyMatched
-    }
-    
+//    game initializer
+//    randomizes draw order
     init() {
         assert(GameModel.allCards.count == 81, "Wrong number of cards")
         for (i, j) in ((0..<81).shuffled()).enumerated() {
             allCards[i].drawOrder = j
             if j < 12 { allCards[i].state = .inGame }
-            
-//            allCards[i].drawOrder = i
-//            if i < 12 { allCards[i].state = .inGame }
         }
         
     }
 }
 
-
+// Finite field of three enumeration with operation of addition
 enum FieldOfThree: Int, CaseIterable {
     case zero = 0, one, two
     

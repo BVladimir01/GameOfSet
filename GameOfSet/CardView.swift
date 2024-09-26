@@ -9,28 +9,34 @@ import SwiftUI
 
 struct CardView: View {
     
+//    simplicity
     typealias Card = ContentView.Card
     
+//    single property - copy of card it stores
     let card: Card
     
+//    the body of view
     var body: some View {
         ZStack {
             let color = colorChoser()
             let opacity = opacityChoser()
-            RoundedRectangle(cornerRadius: 10)
+            let borderColor = borderColorChoser()
+            
+            RoundedRectangle(cornerRadius: Constants.cardCornerRadius)
                 .fill(.white)
-                .strokeBorder(lineWidth: 3)
-                .foregroundStyle(borderColorChoser())
+                .strokeBorder(lineWidth: Constants.cardBorderWidth)
+                .foregroundStyle(borderColor)
             
             MultipleShapeBuilder(count: card.count,
-                                 shape:card.shape)
+                                 shape:card.shape,
+                                 padding: Constants.shapePadding)
             .fill(color.opacity(opacity))
-            .stroke(Color(color), lineWidth: 2)
-            .padding(5)
-//                Text("\(card.shape.rawValue)\n\(card.color.rawValue)\n\(card.texture.rawValue)\n\(card.count.rawValue)")
-            
+            .stroke(Color(color), lineWidth: Constants.shapeBorderWidth)
+            .padding(Constants.shapeViewPadding)
         }
     }
+    
+//    decodes card textrue (opacity)
     func opacityChoser() -> Double{
         switch card.texture {
         case .zero:
@@ -41,7 +47,7 @@ struct CardView: View {
             1
         }
     }
-    
+//    interpretes card borderColor
     func borderColorChoser() -> Color {
         switch (card.isChosen, card.isMatched) {
         case (true, .matched):
@@ -54,7 +60,7 @@ struct CardView: View {
             return .teal
         }
     }
-    
+//    color decoder
     func colorChoser() -> Color {
         switch card.color {
         case .zero:
@@ -66,11 +72,23 @@ struct CardView: View {
         }
     }
     
+//    init sets the card
     init(_ card: Card) {
         self.card = card
     }
+    
+//    cardview constants
+    private struct Constants {
+        static let cardCornerRadius = CGFloat(10)
+        static let cardBorderWidth = CGFloat(3)
+        static let shapeBorderWidth = CGFloat(2)
+        static let shapeViewPadding = CGFloat(5)
+        static let shapePadding = CGFloat(5)
+    }
+    
 }
 
 #Preview {
-    CardView(GameModel.Card(shape: .zero, color: .one, texture: .one, count: .two))
+    CardView(GameModel.Card(shape: .two, color: .one, texture: .one, count: .two))
+        .padding(20)
 }

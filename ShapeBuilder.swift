@@ -7,11 +7,40 @@
 
 import SwiftUI
 
-struct SingleShapeBuilder: Shape {
-    let shape: FieldOfThree
+
+//struct to build multiple shapes
+struct MultipleShapeBuilder: Shape {
     
+//    dictates number of shapes
+    private let count: FieldOfThree
+//    dictates shape
+    private let shape: FieldOfThree
+//    padding between shapes
+    private let padding: CGFloat
+    
+//    draws multiple shapes in rect
     func path(in rect: CGRect) -> Path {
-        let rect = rect.inset(by: UIEdgeInsets(top: 4, left: 5, bottom: 5, right: 5))
+        let origin = rect.origin
+        let width = rect.width
+        let height = rect.height
+        
+        var p = Path()
+    
+        let count = count.rawValue + 1
+        let number = CGFloat(count)
+        var localRect: CGRect
+        
+        for i in 1...count {
+            let i = CGFloat(i)
+            localRect = CGRect(x: origin.x, y: origin.y + height * (i - 1) / number, width: width, height: height / number)
+            p.addPath(singleShapePath(in: localRect))
+        }
+        return p
+    }
+    
+//    func to draw single shape inside rect
+    func singleShapePath(in rect: CGRect) -> Path {
+        let rect = rect.inset(by: UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding))
         let centerX = rect.midX
         let centerY = rect.midY
         let center = CGPoint(x: centerX, y: centerY)
@@ -25,9 +54,11 @@ struct SingleShapeBuilder: Shape {
         
         var p = Path()
         switch shape {
+//            Сircle
         case .zero:
             p.addArc(center: center, radius: radius, startAngle: Angle(radians: .zero), endAngle: Angle(radians: .pi * 2), clockwise: true)
             p.closeSubpath()
+//            Вiamond
         case .one:
             p.move(to: CGPoint(x: centerX, y: centerY - newHeight / 2))
             p.addLine(to: CGPoint(x: centerX + newWidth / 2, y: centerY))
@@ -35,50 +66,26 @@ struct SingleShapeBuilder: Shape {
             p.addLine(to: CGPoint(x: centerX - newWidth / 2, y: centerY))
             p.closeSubpath()
         case .two:
+//            Swoosh
             let rect = CGRect(x: centerX - width / 2, y: centerY - width / 4, width: width, height: width / 2)
-//            p.addRect(rect)
-            p.addEllipse(in: rect)
+//            p.addRoundedRect(in: rect, cornerSize: CGSize(width: rect.height / 2 , height: rect.height / 2))
+            p.addRoundedRect(in: rect,
+                             cornerRadii: RectangleCornerRadii(
+                                topLeading: rect.height / 2,
+                                bottomLeading: 0,
+                                bottomTrailing: rect.height / 2,
+                                topTrailing: 0))
             p.closeSubpath()
         }
         
         return p
-    }
-    
-}
-
-struct MultipleShapeBuilder: Shape {
-    let count: FieldOfThree
-    let shape: FieldOfThree
-    let singleShapeBuilder: SingleShapeBuilder
-    
-    func path(in rect: CGRect) -> Path {
-        let origin = rect.origin
-        let width = rect.width
-        let height = rect.height
         
-        var p = Path()
-        switch count {
-        case .zero:
-            p.addPath(singleShapeBuilder.path(in: rect))
-        case .one:
-            let rect1 = CGRect(x: origin.x, y: origin.y, width: width, height: height / 2)
-            let rect2 = CGRect(x: origin.x, y: origin.y + height / 2, width: width, height: height / 2)
-            p.addPath(singleShapeBuilder.path(in: rect1))
-            p.addPath(singleShapeBuilder.path(in: rect2))
-        case .two:
-            let rect1 = CGRect(x: origin.x, y: origin.y, width: width, height: height / 3)
-            let rect2 = CGRect(x: origin.x, y: origin.y + height / 3, width: width, height: height / 3)
-            let rect3 = CGRect(x: origin.x, y: origin.y + height * 2 / 3, width: width, height: height / 3)
-            p.addPath(singleShapeBuilder.path(in: rect1))
-            p.addPath(singleShapeBuilder.path(in: rect2))
-            p.addPath(singleShapeBuilder.path(in: rect3))
-        }
-        return p
     }
     
-    init(count: FieldOfThree, shape: FieldOfThree) {
+//    init sets singleshapebuilder, shape and count
+    init(count: FieldOfThree, shape: FieldOfThree, padding: CGFloat) {
         self.count = count
         self.shape = shape
-        singleShapeBuilder = SingleShapeBuilder(shape: shape)
+        self.padding = padding
     }
 }

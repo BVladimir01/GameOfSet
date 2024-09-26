@@ -9,16 +9,17 @@ import SwiftUI
 
 struct ContentView: View {
     
+//    viewmodel
     @ObservedObject var viewModel = SetViewModel()
-    
+//    simplicity
     typealias Card = GameModel.Card
     
+//    view body
     var body: some View {
         VStack {
-            
-            BestView(viewModel.inGameCards, aspectRatio: 2/3) { card in
+            BestView(viewModel.inGameCards, aspectRatio: 2 / 3) { card in
                 CardView(card)
-                    .padding(2)
+                    .padding(Constants.cardPadding)
                     .onTapGesture {
                         viewModel.chooseCard(card)
                     }}
@@ -34,45 +35,13 @@ struct ContentView: View {
             .foregroundColor(.teal)
         }
         .padding()
-        
     }
     
-    static func viewParametersFromCard(_ card: Card) -> (color: Color, texture: Double, count: Int) {
-        
-        let color: Color
-        switch card.color {
-        case .zero:
-            color = Color(.orange)
-        case .one:
-            color = Color(.green)
-        case .two:
-            color = Color(.blue)
-        }
-        
-        let texture: Double
-        switch card.texture {
-        case .zero:
-            texture = 0
-        case .one:
-            texture = 0.5
-        case .two:
-            texture = 1
-        }
-        
-        let count: Int
-        switch card.count {
-        case .zero:
-            count = 1
-        case .one:
-            count = 2
-        case .two:
-            count = 3
-        }
-        
-        return (color, texture, count)
+//    contentview constants
+    private struct Constants {
+        static let aspectRatio = CGFloat(2 / 3)
+        static let cardPadding = CGFloat(2)
     }
-    
-    
 }
 
 #Preview {

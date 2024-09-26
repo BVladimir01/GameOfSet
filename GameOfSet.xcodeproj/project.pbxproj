@@ -13,7 +13,7 @@
 		E7BFF0DE2CA3E79E00CF1D20 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7BFF0DD2CA3E79E00CF1D20 /* Preview Assets.xcassets */; };
 		E7BFF0E52CA3EB0000CF1D20 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0E42CA3EB0000CF1D20 /* Model.swift */; };
 		E7BFF0E92CA40AE100CF1D20 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0E82CA40AE100CF1D20 /* ViewModel.swift */; };
-		E7BFF0EB2CA40CFE00CF1D20 /* AspectVGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EA2CA40CFE00CF1D20 /* AspectVGrid.swift */; };
+		E7BFF0EB2CA40CFE00CF1D20 /* BestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */; };
 		E7BFF0ED2CA498B200CF1D20 /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */; };
 		E7BFF0EF2CA49A7300CF1D20 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */; };
 /* End PBXBuildFile section */
@@ -26,7 +26,7 @@
 		E7BFF0DD2CA3E79E00CF1D20 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E7BFF0E42CA3EB0000CF1D20 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		E7BFF0E82CA40AE100CF1D20 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		E7BFF0EA2CA40CFE00CF1D20 /* AspectVGrid.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AspectVGrid.swift; sourceTree = "<group>"; };
+		E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestView.swift; sourceTree = "<group>"; };
 		E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeBuilder.swift; sourceTree = SOURCE_ROOT; };
 		E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -65,7 +65,7 @@
 				E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */,
 				E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */,
 				E7BFF0D82CA3E79D00CF1D20 /* ContentView.swift */,
-				E7BFF0EA2CA40CFE00CF1D20 /* AspectVGrid.swift */,
+				E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */,
 				E7BFF0E82CA40AE100CF1D20 /* ViewModel.swift */,
 				E7BFF0E42CA3EB0000CF1D20 /* Model.swift */,
 				E7BFF0DA2CA3E79E00CF1D20 /* Assets.xcassets */,
@@ -157,7 +157,7 @@
 				E7BFF0ED2CA498B200CF1D20 /* ShapeBuilder.swift in Sources */,
 				E7BFF0D92CA3E79D00CF1D20 /* ContentView.swift in Sources */,
 				E7BFF0E92CA40AE100CF1D20 /* ViewModel.swift in Sources */,
-				E7BFF0EB2CA40CFE00CF1D20 /* AspectVGrid.swift in Sources */,
+				E7BFF0EB2CA40CFE00CF1D20 /* BestView.swift in Sources */,
 				E7BFF0D72CA3E79D00CF1D20 /* GameOfSetApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
