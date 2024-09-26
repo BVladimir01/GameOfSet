@@ -18,22 +18,28 @@ struct BestView<Item: Identifiable, ItemView: View>: View  {
 //    func that builds views from items
     var content: (Item) -> ItemView
     
+    var maxItems: CGFloat
+    var minItems: CGFloat
+    
 //    init
-    init(_ items: [Item], aspectRatio: CGFloat, @ViewBuilder content: @escaping (Item) -> ItemView) {
+    init(_ items: [Item], aspectRatio: CGFloat, minItems: Int, maxItems: Int, @ViewBuilder content: @escaping (Item) -> ItemView) {
         self.items = items
         self.aspectRatio = aspectRatio
         self.content = content
+        self.maxItems = CGFloat(maxItems)
+        self.minItems = CGFloat(minItems)
     }
     
 //    body
     var body: some View {
         GeometryReader {geometry in
+            let givenWidth = geometry.size.width
             let gridItemSize = gridItemWidthThatFits(
                 count: items.count, size: geometry.size, atAspectRatio: aspectRatio)
 //            Either AspectGrid
-            if gridItemSize > 60 {
+            if gridItemSize > givenWidth / maxItems {
                 LazyVGrid(
-                    columns: [GridItem(.adaptive(minimum: gridItemSize), spacing: 0)],
+                    columns: [GridItem(.adaptive(minimum: min(gridItemSize, givenWidth / minItems)), spacing: 0)],
                     spacing: 0) {
                         ForEach(items) {
                             item in
@@ -43,7 +49,7 @@ struct BestView<Item: Identifiable, ItemView: View>: View  {
 //                or ScrollView
             } else {
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 60), spacing: 0)],
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: givenWidth / maxItems), spacing: 0)],
                     spacing: 0){
                         ForEach(items) {
                             item in

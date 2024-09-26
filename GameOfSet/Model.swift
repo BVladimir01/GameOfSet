@@ -49,8 +49,9 @@ struct GameModel: Equatable {
     
 //    func that handles choosing new card
     mutating func chooseCard(_ card: Card) {
+        card.prettyPrint()
         let index = card.id
-        
+
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
             if chosenCards.allSatisfy({$0.isMatched == .matched }) {
@@ -99,6 +100,7 @@ struct GameModel: Equatable {
     }
 //    func that add card from the deck to ingamecards
     mutating func addCards() {
+        
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
             if chosenCards.allSatisfy({$0.isMatched == .matched }) {
@@ -110,12 +112,18 @@ struct GameModel: Equatable {
                 allCards[card.id].state = .inGame
                 if i == 2 { break }
             }
+        } else {
+            
         }
     }
 
     
 //    Card structure
     struct Card: Identifiable, Equatable {
+        
+        func prettyPrint() {
+            print("\(shape.rawValue) \(color.rawValue) \(texture.rawValue) \(count.rawValue)")
+        }
         
 //        cards basic properties
         let shape: FieldOfThree
@@ -190,11 +198,23 @@ struct GameModel: Equatable {
 //    randomizes draw order
     init() {
         assert(GameModel.allCards.count == 81, "Wrong number of cards")
-        for (i, j) in ((0..<81).shuffled()).enumerated() {
+//        for (i, j) in ((0..<81).shuffled()).enumerated() {
+//            allCards[i].drawOrder = j
+//            if j < 12 { allCards[i].state = .inGame }
+//        }
+        
+        for (i, j) in ((0..<81)).enumerated() {
             allCards[i].drawOrder = j
             if j < 12 { allCards[i].state = .inGame }
         }
         
+    }
+    
+    func prettyPrint() {
+        for card in inGameCards {
+            print(card, separator: "   ")
+        }
+        print("-------------")
     }
 }
 

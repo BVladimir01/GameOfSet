@@ -17,14 +17,17 @@ struct ContentView: View {
 //    view body
     var body: some View {
         VStack {
-            BestView(viewModel.inGameCards, aspectRatio: 2 / 3) { card in
+            BestView(viewModel.inGameCards,
+                     aspectRatio: 2 / 3,
+                     minItems: Constants.minItemsInARow,
+                     maxItems: Constants.maxItemsInARow) { card in
                 CardView(card)
                     .padding(Constants.cardPadding)
                     .onTapGesture {
                         viewModel.chooseCard(card)
                     }
             }
-            .animation(.default, value: viewModel.inGameCards)
+//            .animation(.default, value: viewModel.inGameCards)
             HStack {
                 if !viewModel.deckIsEmpty {
                     Button("Add 3 Cards") { viewModel.addCards() }
@@ -42,6 +45,8 @@ struct ContentView: View {
     private struct Constants {
         static let aspectRatio = CGFloat(2 / 3)
         static let cardPadding = CGFloat(2)
+        static let maxItemsInARow = 6
+        static let minItemsInARow = 3
     }
 }
 
