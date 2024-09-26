@@ -26,7 +26,7 @@ struct CardView: View {
         .fill(color.opacity(opacity))
         .stroke(Color(color), lineWidth: Constants.shapeBorderWidth)
         .padding(Constants.shapeViewPadding)
-        .modifier(Cardify(borderColor: borderColor))
+        .cardify(borderColor: borderColor)
     }
     
 //    decodes card textrue (opacity)
@@ -82,4 +82,10 @@ struct CardView: View {
 #Preview {
     CardView(GameModel.Card(shape: .two, color: .one, texture: .one, count: .two))
         .padding(20)
+}
+
+extension View {
+    func cardify(borderColor: Color) -> some View {
+        self.modifier(Cardify(borderColor: borderColor))
+    }
 }

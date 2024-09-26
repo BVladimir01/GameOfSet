@@ -22,7 +22,8 @@ struct ContentView: View {
                     .padding(Constants.cardPadding)
                     .onTapGesture {
                         viewModel.chooseCard(card)
-                    }}
+                    }
+            }
             .animation(.default, value: viewModel.inGameCards)
             HStack {
                 if !viewModel.deckIsEmpty {
