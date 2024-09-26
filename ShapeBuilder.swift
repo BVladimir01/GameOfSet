@@ -71,9 +71,9 @@ struct MultipleShapeBuilder: Shape {
 //            p.addRoundedRect(in: rect, cornerSize: CGSize(width: rect.height / 2 , height: rect.height / 2))
             p.addRoundedRect(in: rect,
                              cornerRadii: RectangleCornerRadii(
-                                topLeading: rect.height / 2,
+                                topLeading: rect.height,
                                 bottomLeading: 0,
-                                bottomTrailing: rect.height / 2,
+                                bottomTrailing: rect.height,
                                 topTrailing: 0))
             p.closeSubpath()
         }

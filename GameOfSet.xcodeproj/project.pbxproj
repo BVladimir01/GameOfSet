@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E7B36C182CA549E1007D925E /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B36C172CA549E1007D925E /* Cardify.swift */; };
 		E7BFF0D72CA3E79D00CF1D20 /* GameOfSetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */; };
 		E7BFF0D92CA3E79D00CF1D20 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0D82CA3E79D00CF1D20 /* ContentView.swift */; };
 		E7BFF0DB2CA3E79E00CF1D20 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E7BFF0DA2CA3E79E00CF1D20 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E7B36C172CA549E1007D925E /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		E7BFF0D32CA3E79D00CF1D20 /* GameOfSet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameOfSet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOfSetApp.swift; sourceTree = "<group>"; };
 		E7BFF0D82CA3E79D00CF1D20 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */,
+				E7B36C172CA549E1007D925E /* Cardify.swift */,
 				E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */,
 				E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */,
 				E7BFF0D82CA3E79D00CF1D20 /* ContentView.swift */,
@@ -154,6 +157,7 @@
 			files = (
 				E7BFF0EF2CA49A7300CF1D20 /* CardView.swift in Sources */,
 				E7BFF0E52CA3EB0000CF1D20 /* Model.swift in Sources */,
+				E7B36C182CA549E1007D925E /* Cardify.swift in Sources */,
 				E7BFF0ED2CA498B200CF1D20 /* ShapeBuilder.swift in Sources */,
 				E7BFF0D92CA3E79D00CF1D20 /* ContentView.swift in Sources */,
 				E7BFF0E92CA40AE100CF1D20 /* ViewModel.swift in Sources */,

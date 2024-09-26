@@ -17,23 +17,16 @@ struct CardView: View {
     
 //    the body of view
     var body: some View {
-        ZStack {
-            let color = colorChoser()
-            let opacity = opacityChoser()
-            let borderColor = borderColorChoser()
-            
-            RoundedRectangle(cornerRadius: Constants.cardCornerRadius)
-                .fill(.white)
-                .strokeBorder(lineWidth: Constants.cardBorderWidth)
-                .foregroundStyle(borderColor)
-            
-            MultipleShapeBuilder(count: card.count,
-                                 shape:card.shape,
-                                 padding: Constants.shapePadding)
-            .fill(color.opacity(opacity))
-            .stroke(Color(color), lineWidth: Constants.shapeBorderWidth)
-            .padding(Constants.shapeViewPadding)
-        }
+        let color = colorChoser()
+        let opacity = opacityChoser()
+        let borderColor = borderColorChoser()
+        MultipleShapeBuilder(count: card.count,
+                             shape:card.shape,
+                             padding: Constants.shapePadding)
+        .fill(color.opacity(opacity))
+        .stroke(Color(color), lineWidth: Constants.shapeBorderWidth)
+        .padding(Constants.shapeViewPadding)
+        .modifier(Cardify(borderColor: borderColor))
     }
     
 //    decodes card textrue (opacity)
@@ -79,8 +72,6 @@ struct CardView: View {
     
 //    cardview constants
     private struct Constants {
-        static let cardCornerRadius = CGFloat(10)
-        static let cardBorderWidth = CGFloat(3)
         static let shapeBorderWidth = CGFloat(2)
         static let shapeViewPadding = CGFloat(5)
         static let shapePadding = CGFloat(5)
