@@ -34,9 +34,7 @@ struct CardView: View {
         .padding(Constants.shapeViewPadding)
         .cardify(borderColor: borderColor, state: card.state)
         .bouncing(offsetPercentage: verticalOffsetPercentage, trigger: card.isMatched == .matched)
-        .shaking(offsetPercentage: horizontalOFfsetPercentage, numBounces: 3, damping: 0.8, trigger: card.isMatched == .falslyMatched, duration: 0.2)
-        .matchedGeometryEffect(id: card.id, in: namespace)
-        
+        .shaking(offsetPercentage: horizontalOFfsetPercentage, numBounces: 3, damping: 0.8, trigger: card.isMatched == .falslyMatched, duration: 0.2)        
     }
     
 //    decodes card textrue (opacity)

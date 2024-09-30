@@ -43,6 +43,10 @@ class SetViewModel: ObservableObject {
         game.addCards()
     }
     
+    func addCard() {
+        game.addCard()
+    }
+    
 //    starts new game
     func newGame() {
         game = GameModel()

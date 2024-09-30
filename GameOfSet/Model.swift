@@ -122,6 +122,18 @@ struct GameModel: Equatable {
             
         }
     }
+    
+    mutating func addCard() {
+        if chosenCards.count == 3 {
+            let indicies = chosenCards.map { $0.id }
+            if chosenCards.allSatisfy({$0.isMatched == .matched }) {
+                for index in indicies { allCards[index].state = .outOfGame }
+            }
+        }
+        if let card = inDeckCards.first {
+            allCards[card.id].state = .inGame
+        }
+    }
 
     
 //    Card structure
