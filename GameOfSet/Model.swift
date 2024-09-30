@@ -24,24 +24,30 @@ struct GameModel: Equatable {
     
 //    every card of the game
     private var allCards: [Card] = GameModel.allCards
+    
 //    cards that are in the deck, sorted by drawing order
-    private var inDeckCards: [Card] {
+    var inDeckCards: [Card] {
         allCards.filter { $0.state == .inDeck }
             .sorted { $0.drawOrder < $1.drawOrder }
     }
+    
 //    cards that are on the tavble, sorted by draw order
     var inGameCards: [Card] {
         allCards.filter { $0.state == .inGame }
             .sorted { $0.drawOrder < $1.drawOrder }
     }
+    
 //    cards, chosen by the player, that are on the table
     private var chosenCards: [Card] {
         inGameCards.filter { $0.isChosen }
     }
+    
 //    cards that went out of the game
-    private var outOfGameCards: [Card] {
+    var outOfGameCards: [Card] {
         allCards.filter { $0.state == .outOfGame }
+            .sorted { $0.drawOrder < $1.drawOrder }
     }
+    
 //    bool property ot check end of the deck
     var deckIsEmpty: Bool {
         inDeckCards.isEmpty
@@ -89,6 +95,7 @@ struct GameModel: Equatable {
         }
         addCards()
     }
+    
 //    func that handles false matching, when choosing a card
     private mutating func onNonMatch() {
         while !chosenCards.isEmpty {
@@ -98,8 +105,8 @@ struct GameModel: Equatable {
         }
     }
 //    func that add card from the deck to ingamecards
+    
     mutating func addCards() {
-        
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
             if chosenCards.allSatisfy({$0.isMatched == .matched }) {
@@ -127,13 +134,13 @@ struct GameModel: Equatable {
         let count: FieldOfThree
         
 //        cards state in the game
-        fileprivate var state: CardState = .inDeck
+        var state: CardState = .inDeck
         var isChosen: Bool = false
         var isMatched: MatchState = .nonMatched
         
 //        cards id and drawing order
         let id: Int
-        fileprivate var drawOrder: Int = 0
+        var drawOrder: Int = 0
         
 //        static counter for assigning ids
         private static var cardCount = 0
@@ -186,6 +193,9 @@ struct GameModel: Equatable {
             case matched, nonMatched, falslyMatched
         }
         
+        
+        
+        
     }
     
     
@@ -198,7 +208,7 @@ struct GameModel: Equatable {
 //            if j < 12 { allCards[i].state = .inGame }
 //        }
         
-        for (i, j) in ((0..<81).shuffled()).enumerated() {
+        for (i, j) in ((0..<81)).enumerated() {
             allCards[i].drawOrder = j
             if j < 12 { allCards[i].state = .inGame }
         }

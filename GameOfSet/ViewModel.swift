@@ -19,6 +19,15 @@ class SetViewModel: ObservableObject {
     var inGameCards: [Card] {
         game.inGameCards
     }
+    
+    var outOfGameCards: [Card] {
+        game.outOfGameCards
+    }
+    
+    var inDeckCards: [Card] {
+        game.inDeckCards
+    }
+    
 //    allows acces for view to check deck
     var deckIsEmpty: Bool {
         game.deckIsEmpty
@@ -37,5 +46,9 @@ class SetViewModel: ObservableObject {
 //    starts new game
     func newGame() {
         game = GameModel()
+    }
+    
+    struct Constants {
+        static let themeColor: Color = .teal
     }
 }

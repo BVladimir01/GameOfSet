@@ -17,6 +17,7 @@
 		E7BFF0EB2CA40CFE00CF1D20 /* BestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */; };
 		E7BFF0ED2CA498B200CF1D20 /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */; };
 		E7BFF0EF2CA49A7300CF1D20 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */; };
+		E7EA437C2CAA655200979B8B /* CardDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EA437B2CAA655200979B8B /* CardDeckView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestView.swift; sourceTree = "<group>"; };
 		E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeBuilder.swift; sourceTree = SOURCE_ROOT; };
 		E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		E7EA437B2CAA655200979B8B /* CardDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +70,7 @@
 				E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */,
 				E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */,
 				E7BFF0D82CA3E79D00CF1D20 /* ContentView.swift */,
+				E7EA437B2CAA655200979B8B /* CardDeckView.swift */,
 				E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */,
 				E7BFF0E82CA40AE100CF1D20 /* ViewModel.swift */,
 				E7BFF0E42CA3EB0000CF1D20 /* Model.swift */,
@@ -163,6 +166,7 @@
 				E7BFF0E92CA40AE100CF1D20 /* ViewModel.swift in Sources */,
 				E7BFF0EB2CA40CFE00CF1D20 /* BestView.swift in Sources */,
 				E7BFF0D72CA3E79D00CF1D20 /* GameOfSetApp.swift in Sources */,
+				E7EA437C2CAA655200979B8B /* CardDeckView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,6 +9,9 @@ import SwiftUI
 
 struct CardView: View {
     
+    @Namespace var namespace
+    
+    @State var bounced = false
 //    simplicity
     typealias Card = ContentView.Card
     
@@ -20,13 +23,20 @@ struct CardView: View {
         let color = colorChoser()
         let opacity = opacityChoser()
         let borderColor = borderColorChoser()
+        let verticalOffsetPercentage = card.isMatched == .matched ? -0.15 : 0
+        let horizontalOFfsetPercentage = card.isMatched == .falslyMatched ? 0.01 : 0
+        
         MultipleShapeBuilder(count: card.count,
                              shape:card.shape,
                              padding: Constants.shapePadding)
         .fill(color.opacity(opacity))
         .stroke(Color(color), lineWidth: Constants.shapeBorderWidth)
         .padding(Constants.shapeViewPadding)
-        .cardify(borderColor: borderColor)
+        .cardify(borderColor: borderColor, state: card.state)
+        .bouncing(offsetPercentage: verticalOffsetPercentage, trigger: card.isMatched == .matched)
+        .shaking(offsetPercentage: horizontalOFfsetPercentage, numBounces: 3, damping: 0.8, trigger: card.isMatched == .falslyMatched, duration: 0.2)
+        .matchedGeometryEffect(id: card.id, in: namespace)
+        
     }
     
 //    decodes card textrue (opacity)
@@ -65,6 +75,10 @@ struct CardView: View {
         }
     }
     
+    func scaleChoser() -> CGSize {
+        return borderColorChoser() == .green ? CGSize(width: 1.1, height: 1.1) : CGSize(width: 1, height: 1)
+    }
+    
 //    init sets the card
     init(_ card: Card) {
         self.card = card
@@ -76,7 +90,6 @@ struct CardView: View {
         static let shapeViewPadding = CGFloat(5)
         static let shapePadding = CGFloat(5)
     }
-    
 }
 
 #Preview {
@@ -85,7 +98,78 @@ struct CardView: View {
 }
 
 extension View {
-    func cardify(borderColor: Color) -> some View {
-        self.modifier(Cardify(borderColor: borderColor))
+    func cardify(borderColor: Color, state: GameModel.Card.CardState) -> some View {
+        self.modifier(Cardify(borderColor: borderColor, state: state))
+    }
+}
+
+
+
+struct SpringingAnimation: CustomAnimation {
+    
+    let duration: TimeInterval
+    let numCycles: Int
+    let dampingSpeed: Double
+    
+    func animate<V>(value: V, time: TimeInterval, context: inout AnimationContext<V>) -> V? where V : VectorArithmetic {
+        let percentage = time / duration
+        let numCycles = Double(numCycles)
+        if time > duration { return value.scaled(by: 0) }
+        return value.scaled(by: sin(numCycles * percentage * .pi) * sin(numCycles * percentage * .pi)*exp(-dampingSpeed * percentage))
+    }
+}
+
+extension Animation {
+    static var springingAnimation: Animation {
+        springingAnimation(duration: 1.5, numCycles: 6, dampingSpeed: 3) }
+    static func springingAnimation(duration: TimeInterval, numCycles: Int, dampingSpeed: Double) -> Animation {
+        Animation(SpringingAnimation(duration: duration,
+                                    numCycles: numCycles,
+                                    dampingSpeed: dampingSpeed))
+    }
+}
+
+
+extension View {
+    func bouncing(offsetPercentage: Double,
+                  numBounces: Int = 3,
+                  damping: Double = 0.5,
+                  trigger: some Equatable,
+                  duration: TimeInterval = 1) -> some View {
+        return GeometryReader(content: { geometry in
+            let animationDuration = duration  / Double(2 * numBounces)
+            var coords: [CGFloat] = [CGFloat(0)]
+            for i in 0..<numBounces {
+                coords.append(CGFloat(geometry.size.height * offsetPercentage * pow(CGFloat(damping), CGFloat(i)) ))
+                coords.append(CGFloat(0))
+            }
+            
+            return self.phaseAnimator(coords, trigger: trigger) {content, coord in
+                content.offset(x: 0, y: coord)
+            } animation: { coord in
+                coord == CGFloat(0) ? .easeIn(duration: animationDuration) : .easeOut(duration: animationDuration)
+            }
+        })
+    }
+    
+    func shaking(offsetPercentage: Double,
+                  numBounces: Int = 3,
+                  damping: Double = 0.5,
+                  trigger: some Equatable,
+                  duration: TimeInterval = 1) -> some View {
+        return GeometryReader(content: { geometry in
+            let duration = duration / Double(2 * numBounces)
+            var coords: [CGFloat] = [CGFloat(0)]
+            for i in 0..<numBounces {
+                coords.append(CGFloat(geometry.size.width * offsetPercentage * pow(CGFloat(damping), CGFloat(i))))
+                coords.append(-CGFloat(geometry.size.width * offsetPercentage * pow(CGFloat(damping), CGFloat(i))))
+            }
+            
+            return self.phaseAnimator(coords, trigger: trigger) {content, coord in
+                content.offset(x: coord, y: 0)
+            } animation: { coord in
+                    .linear(duration: duration)
+            }
+        })
     }
 }
