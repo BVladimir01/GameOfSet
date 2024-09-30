@@ -43,10 +43,10 @@ struct GameModel: Equatable {
     }
     
 //    cards that went out of the game
-    var outOfGameCards: [Card] {
-        allCards.filter { $0.state == .outOfGame }
-            .sorted { $0.drawOrder < $1.drawOrder }
-    }
+    var outOfGameCards: [Card]  = []
+//        allCards.filter { $0.state == .outOfGame }
+//            .sorted { $0.drawOrder < $1.drawOrder }
+//    }
     
 //    bool property ot check end of the deck
     var deckIsEmpty: Bool {
@@ -60,7 +60,10 @@ struct GameModel: Equatable {
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
             if chosenCards.allSatisfy({$0.isMatched == .matched }) {
-                for index in indicies { allCards[index].state = .outOfGame }
+                for index in indicies {
+                    allCards[index].state = .outOfGame
+                    outOfGameCards.append(allCards[index])
+                }
                 addCards()
             } else {
                 for index in indicies {

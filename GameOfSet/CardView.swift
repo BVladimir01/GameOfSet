@@ -48,16 +48,21 @@ struct CardView: View {
             1
         }
     }
+    
 //    interpretes card borderColor
     func borderColorChoser() -> Color {
-        switch (card.isChosen, card.isMatched) {
-        case (true, .matched):
-            return .green
-        case (true, .falslyMatched):
-            return .red
-        case (true, .nonMatched):
-            return .yellow
-        default:
+        if card.state == .inGame {
+            switch (card.isChosen, card.isMatched) {
+            case (true, .matched):
+                return .green
+            case (true, .falslyMatched):
+                return .red
+            case (true, .nonMatched):
+                return .yellow
+            default:
+                return .teal
+            }
+        } else {
             return .teal
         }
     }
@@ -71,10 +76,6 @@ struct CardView: View {
         case .two:
                 .green
         }
-    }
-    
-    func scaleChoser() -> CGSize {
-        return borderColorChoser() == .green ? CGSize(width: 1.1, height: 1.1) : CGSize(width: 1, height: 1)
     }
     
 //    init sets the card
@@ -98,32 +99,6 @@ struct CardView: View {
 extension View {
     func cardify(borderColor: Color, state: GameModel.Card.CardState) -> some View {
         self.modifier(Cardify(borderColor: borderColor, state: state))
-    }
-}
-
-
-
-struct SpringingAnimation: CustomAnimation {
-    
-    let duration: TimeInterval
-    let numCycles: Int
-    let dampingSpeed: Double
-    
-    func animate<V>(value: V, time: TimeInterval, context: inout AnimationContext<V>) -> V? where V : VectorArithmetic {
-        let percentage = time / duration
-        let numCycles = Double(numCycles)
-        if time > duration { return value.scaled(by: 0) }
-        return value.scaled(by: sin(numCycles * percentage * .pi) * sin(numCycles * percentage * .pi)*exp(-dampingSpeed * percentage))
-    }
-}
-
-extension Animation {
-    static var springingAnimation: Animation {
-        springingAnimation(duration: 1.5, numCycles: 6, dampingSpeed: 3) }
-    static func springingAnimation(duration: TimeInterval, numCycles: Int, dampingSpeed: Double) -> Animation {
-        Animation(SpringingAnimation(duration: duration,
-                                    numCycles: numCycles,
-                                    dampingSpeed: dampingSpeed))
     }
 }
 

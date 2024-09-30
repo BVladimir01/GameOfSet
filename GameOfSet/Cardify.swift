@@ -11,7 +11,7 @@ import SwiftUI
 struct Cardify: ViewModifier, Animatable {
     
     init(borderColor: Color, state: GameModel.Card.CardState) {
-        angle =  (state == .inGame) ? .zero : .degrees(180)
+        angle =  (state != .inDeck) ? .zero : .degrees(180)
         self.borderColor = borderColor
         self.state = state
     }
@@ -36,7 +36,7 @@ struct Cardify: ViewModifier, Animatable {
                 .fill(.teal)
                 .strokeBorder(lineWidth: Constants.cardBorderWidth)
                 .foregroundStyle(.black)
-                .opacity(state == .inGame ? 0 : 1)
+                .opacity(angle < .degrees(90) ? 0 : 1)
         }
         .rotation3DEffect(angle, axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/
         )

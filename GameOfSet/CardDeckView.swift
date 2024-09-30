@@ -29,25 +29,38 @@ struct CardDeckView<ItemView: View>: View  {
     var body: some View {
         if cards.count > 0 {
             ZStack {
-                ForEach(cards) { card in
-                    let intencity = abs(Double(card.drawOrder) - Double(cards.last!.drawOrder)) / Double(cards.count)
+                ForEach(cards.reversed()) { card in
+                    let intencity = Double(cards.firstIndex(of: card)!) / Double(cards.count)
+                    let coordAmp = 15.0
+                    let angleAmp = 5.0
+                    let randomTripple = randomTrippleFloat(for: card.id)
                     content(card)
-                        .offset(x: offsetRandomizer(intencity: intencity),
-                                y: offsetRandomizer(intencity: intencity))
-                        .rotationEffect(angleRadomizer(intencity: intencity))
+                        .offset(x: CGFloat(randomTripple.x * coordAmp * intencity),
+                                y: CGFloat(randomTripple.y * coordAmp * intencity))
+                        .rotationEffect(.degrees(randomTripple.angle * angleAmp * intencity))
                 }
             }
         }
     }
     
+    func randomTrippleFloat(for obj: any Hashable) -> (x: Double, y: Double, angle: Double) {
+        let x = obj.hashValue
+        let y = 0.hashValue ^ x
+        let z = 1.hashValue ^ x
+        let max = Double(Int.max)
+        
+        return (Double(x) / max, Double(y) / max, Double(z) / max)
+    }
     
-    func offsetRandomizer(intencity: Double) -> CGFloat {
+    func offsetRandomizer(_ card: Card, intencity: Double) -> CGFloat {
+        let amplitude = 15.0 * intencity
         let sign = Double(Bool.random() ? +1 : -1)
-        return sign * CGFloat.random(in: 0...15*intencity)
+        return sign * CGFloat.random(in: 0...15 * intencity)
     }
     
     
-    func angleRadomizer(intencity: Double) -> Angle {
+    func angleRadomizer(_ card: Card, intencity: Double) -> Angle {
+        let amplitude = 5.0 * intencity
         let sign = Double(Bool.random() ? +1 : -1)
         let angle = Double.random(in: 0...5 * intencity)
         return .degrees(angle * sign)
