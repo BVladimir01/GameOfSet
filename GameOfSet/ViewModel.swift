@@ -33,11 +33,15 @@ class SetViewModel: ObservableObject {
         game.deckIsEmpty
     }
     
+    var areMatched: Bool {
+        return (game.chosenCards.allSatisfy({$0.isMatched == .matched }) && game.chosenCards.count == 3)
+    }
 //    delegates intent from view to model
 //    delegates card choosing
-    func chooseCard(_ card: Card) {
+    func chooseCard(_ card: Card) -> Bool {
         game.chooseCard(card)
     }
+    
 //    delegates card addition
     func addCards() {
         game.addCards()

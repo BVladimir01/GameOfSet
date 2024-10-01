@@ -38,7 +38,7 @@ struct GameModel: Equatable {
     }
     
 //    cards, chosen by the player, that are on the table
-    private var chosenCards: [Card] {
+    var chosenCards: [Card] {
         inGameCards.filter { $0.isChosen }
     }
     
@@ -54,7 +54,8 @@ struct GameModel: Equatable {
     }
     
 //    func that handles choosing new card
-    mutating func chooseCard(_ card: Card) {
+//    return true if cards were matched and removed
+    mutating func chooseCard(_ card: Card) -> Bool {
         let index = card.id
 
         if chosenCards.count == 3 {
@@ -64,15 +65,15 @@ struct GameModel: Equatable {
                     allCards[index].state = .outOfGame
                     outOfGameCards.append(allCards[index])
                 }
-                addCards()
+//                addCards()
+            return true
             } else {
                 for index in indicies {
                     allCards[index].isChosen = false
                     allCards[index].isMatched = .nonMatched
                 }
             }
-            allCards[index].isChosen = true
-            return
+            allCards[index].isChosen = true   
         }
         
         if allCards[index].isChosen { allCards[index].isChosen = false}
@@ -87,7 +88,9 @@ struct GameModel: Equatable {
             }
             
         }
+        return false
     }
+    
 //    func that handles matching, when choosing a card
     private mutating func onMatch() {
         while !chosenCards.isEmpty {

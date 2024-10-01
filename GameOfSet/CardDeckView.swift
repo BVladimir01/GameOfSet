@@ -29,9 +29,10 @@ struct CardDeckView<ItemView: View>: View  {
     var body: some View {
         if cards.count > 0 {
             ZStack {
-                ForEach(cards.reversed()) { card in
-                    let intencity = Double(cards.firstIndex(of: card)!) / Double(cards.count)
-                    let coordAmp = 15.0
+                ForEach(cards) { card in
+//                    let intencity = Double(cards.firstIndex(of: card)!) / Double(cards.count)
+                    let intencity = 1.0
+                    let coordAmp = 10.0
                     let angleAmp = 5.0
                     let randomTripple = randomTrippleFloat(for: card.id)
                     content(card)
@@ -52,19 +53,19 @@ struct CardDeckView<ItemView: View>: View  {
         return (Double(x) / max, Double(y) / max, Double(z) / max)
     }
     
-    func offsetRandomizer(_ card: Card, intencity: Double) -> CGFloat {
-        let amplitude = 15.0 * intencity
-        let sign = Double(Bool.random() ? +1 : -1)
-        return sign * CGFloat.random(in: 0...15 * intencity)
-    }
-    
-    
-    func angleRadomizer(_ card: Card, intencity: Double) -> Angle {
-        let amplitude = 5.0 * intencity
-        let sign = Double(Bool.random() ? +1 : -1)
-        let angle = Double.random(in: 0...5 * intencity)
-        return .degrees(angle * sign)
-    }
+//    func offsetRandomizer(_ card: Card, intencity: Double) -> CGFloat {
+//        let amplitude = 15.0 * intencity
+//        let sign = Double(Bool.random() ? +1 : -1)
+//        return sign * CGFloat.random(in: 0...15 * intencity)
+//    }
+//    
+//    
+//    func angleRadomizer(_ card: Card, intencity: Double) -> Angle {
+//        let amplitude = 5.0 * intencity
+//        let sign = Double(Bool.random() ? +1 : -1)
+//        let angle = Double.random(in: 0...5 * intencity)
+//        return .degrees(angle * sign)
+//    }
 }
 
 
