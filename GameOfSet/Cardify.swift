@@ -31,7 +31,9 @@ struct Cardify: ViewModifier, Animatable {
                 .fill(.white)
                 .strokeBorder(lineWidth: Constants.cardBorderWidth)
                 .foregroundStyle(borderColor)
+                .opacity(angle < .degrees(90) ? 1 : 0)
             content
+                .opacity(angle < .degrees(90) ? 1 : 0)
             RoundedRectangle(cornerRadius: Constants.cardCornerRadius)
                 .fill(.teal)
                 .strokeBorder(lineWidth: Constants.cardBorderWidth)

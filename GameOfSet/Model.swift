@@ -8,7 +8,9 @@
 import Foundation
 
 
-struct GameModel: Equatable {
+struct GameModel: Equatable, Identifiable {
+    
+    var id: Int
     
 //    global copy of starting deck for every game
     private static let allCards: [Card] = generateAllCards()
@@ -57,7 +59,8 @@ struct GameModel: Equatable {
 //    return true if cards were matched and removed
     mutating func chooseCard(_ card: Card) -> Bool {
         let index = card.id
-
+        var res = false
+        
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
             if chosenCards.allSatisfy({$0.isMatched == .matched }) {
@@ -66,14 +69,15 @@ struct GameModel: Equatable {
                     outOfGameCards.append(allCards[index])
                 }
 //                addCards()
-            return true
+            res = true
             } else {
                 for index in indicies {
                     allCards[index].isChosen = false
                     allCards[index].isMatched = .nonMatched
                 }
             }
-            allCards[index].isChosen = true   
+            allCards[index].isChosen = true
+            return res
         }
         
         if allCards[index].isChosen { allCards[index].isChosen = false}
@@ -88,7 +92,7 @@ struct GameModel: Equatable {
             }
             
         }
-        return false
+        return res
     }
     
 //    func that handles matching, when choosing a card
@@ -110,8 +114,8 @@ struct GameModel: Equatable {
             allCards[index].isChosen = false
         }
     }
-//    func that add card from the deck to ingamecards
     
+//    func that add 3cards from the deck to ingamecards
     mutating func addCards() {
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
@@ -129,6 +133,7 @@ struct GameModel: Equatable {
         }
     }
     
+//    adds single card
     mutating func addCard() {
         if chosenCards.count == 3 {
             let indicies = chosenCards.map { $0.id }
@@ -221,17 +226,15 @@ struct GameModel: Equatable {
 //    randomizes draw order
     init() {
         assert(GameModel.allCards.count == 81, "Wrong number of cards")
-//        for (i, j) in ((0..<81).shuffled()).enumerated() {
-//            allCards[i].drawOrder = j
-//            if j < 12 { allCards[i].state = .inGame }
-//        }
-        
         for (i, j) in ((0..<81)).enumerated() {
             allCards[i].drawOrder = j
             if j < 12 { allCards[i].state = .inGame }
         }
-        
+        id = GameModel.numGames
+        GameModel.numGames += 1
     }
+    
+    static var numGames = 0
 }
 
 // Finite field of three enumeration with operation of addition

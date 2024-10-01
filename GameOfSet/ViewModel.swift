@@ -19,11 +19,13 @@ class SetViewModel: ObservableObject {
     var inGameCards: [Card] {
         game.inGameCards
     }
-    
+
+//    allows access for view to read out of game cards
     var outOfGameCards: [Card] {
         game.outOfGameCards
     }
     
+//    allows view to access deck cards
     var inDeckCards: [Card] {
         game.inDeckCards
     }
@@ -33,20 +35,22 @@ class SetViewModel: ObservableObject {
         game.deckIsEmpty
     }
     
-    var areMatched: Bool {
-        return (game.chosenCards.allSatisfy({$0.isMatched == .matched }) && game.chosenCards.count == 3)
+    var gameId: Int {
+        game.id
     }
+
 //    delegates intent from view to model
 //    delegates card choosing
     func chooseCard(_ card: Card) -> Bool {
         game.chooseCard(card)
     }
     
-//    delegates card addition
+//    delegates 3 card addition
     func addCards() {
         game.addCards()
     }
     
+//    delegates 3 card addition
     func addCard() {
         game.addCard()
     }

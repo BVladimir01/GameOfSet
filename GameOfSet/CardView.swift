@@ -23,18 +23,16 @@ struct CardView: View {
         let color = colorChoser()
         let opacity = opacityChoser()
         let borderColor = borderColorChoser()
-        let verticalOffsetPercentage = card.isMatched == .matched ? -0.15 : 0
-        let horizontalOFfsetPercentage = card.isMatched == .falslyMatched ? 0.01 : 0
+        let verticalOffsetPercentage = card.isMatched == .matched ? Constants.verticalOffset : 0
+        let horizontalOFfsetPercentage = card.isMatched == .falslyMatched ? Constants.horizontalOffset : 0
         
         MultipleShapeBuilder(count: card.count,
                              shape:card.shape,
                              padding: Constants.shapePadding)
-        .fill(color.opacity(opacity))
-        .stroke(Color(color), lineWidth: Constants.shapeBorderWidth)
-        .padding(Constants.shapeViewPadding)
+        .addColorStrokePadding(color: color, opacity: opacity, linewidth: Constants.shapeBorderWidth, padding: Constants.shapeViewPadding)
         .cardify(borderColor: borderColor, state: card.state)
         .bouncing(offsetPercentage: verticalOffsetPercentage, trigger: card.isMatched == .matched)
-        .shaking(offsetPercentage: horizontalOFfsetPercentage, numBounces: 3, damping: 0.8, trigger: card.isMatched == .falslyMatched, duration: 0.2)        
+        .shaking(offsetPercentage: horizontalOFfsetPercentage, trigger: card.isMatched == .falslyMatched)        
     }
     
 //    decodes card textrue (opacity)
@@ -66,6 +64,7 @@ struct CardView: View {
             return .teal
         }
     }
+    
 //    color decoder
     func colorChoser() -> Color {
         switch card.color {
@@ -88,6 +87,10 @@ struct CardView: View {
         static let shapeBorderWidth = CGFloat(2)
         static let shapeViewPadding = CGFloat(5)
         static let shapePadding = CGFloat(5)
+        static let verticalOffset = -0.15
+        static let horizontalOffset = 0.01
+        static let numBounces = 3
+        static let damping = 0.8
     }
 }
 
@@ -127,9 +130,9 @@ extension View {
     
     func shaking(offsetPercentage: Double,
                   numBounces: Int = 3,
-                  damping: Double = 0.5,
+                  damping: Double = 0.8,
                   trigger: some Equatable,
-                  duration: TimeInterval = 1) -> some View {
+                 duration: TimeInterval = 0.2) -> some View {
         return GeometryReader(content: { geometry in
             let duration = duration / Double(2 * numBounces)
             var coords: [CGFloat] = [CGFloat(0)]
@@ -144,5 +147,14 @@ extension View {
                     .linear(duration: duration)
             }
         })
+    }
+}
+
+
+extension Shape {
+    func addColorStrokePadding(color: Color, opacity: Double, linewidth: CGFloat, padding: CGFloat) -> some View {
+        self.fill(color.opacity(opacity))
+            .stroke(color, lineWidth: linewidth)
+            .padding(padding)
     }
 }
