@@ -46,7 +46,7 @@ struct ContentView: View {
             
             HStack {
                 if viewModel.deckIsEmpty { Rectangle().foregroundStyle(.clear).frame(width: 100, height: 150)}
-                CardDeckView(viewModel.inDeckCards, aspectRatio: 2 / 3, gameId: viewModel.gameId) { card in
+                CardDeckView(viewModel.inDeckCards.reversed(), aspectRatio: 2 / 3, gameId: viewModel.gameId) { card in
                     CardView(card)
                         .matchedGeometryEffect(id: card.id, in: cardsView, isSource: true)
                         .transition(.asymmetric(insertion: .identity, removal: .identity))
@@ -66,7 +66,6 @@ struct ContentView: View {
                         .transition(.asymmetric(insertion: .identity, removal: .identity))
                 }
                 .frame(width: 80, height: 120)
-//                .zIndex(0)
                 Spacer()
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
