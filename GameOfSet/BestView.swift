@@ -36,28 +36,36 @@ struct BestView<Item: Identifiable, ItemView: View>: View  {
             let givenWidth = geometry.size.width
             let gridItemSize = gridItemWidthThatFits(
                 count: items.count, size: geometry.size, atAspectRatio: aspectRatio)
-//            Either AspectGrid
-            if gridItemSize > givenWidth / maxItems {
-                LazyVGrid(
-                    columns: [GridItem(.adaptive(minimum: min(gridItemSize, givenWidth / minItems)), spacing: 0)],
-                    spacing: 0) {
-                        ForEach(items) {
-                            item in
-                            content(item).aspectRatio(aspectRatio, contentMode: .fit)
-                        }
-                    }
-//                or ScrollView
-            } else {
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: givenWidth / maxItems), spacing: 0)],
-                    spacing: 0){
-                        ForEach(items) {
-                            item in
-                            content(item).aspectRatio(aspectRatio, contentMode: .fit)
-                        }
+            LazyVGrid(
+                columns: [GridItem(.adaptive(minimum: min(gridItemSize, givenWidth / minItems)), spacing: 0)],
+                spacing: 0) {
+                    ForEach(items) {
+                        item in
+                        content(item).aspectRatio(aspectRatio, contentMode: .fit)
                     }
                 }
-            }
+////            Either AspectGrid
+//            if gridItemSize > givenWidth / maxItems {
+//                LazyVGrid(
+//                    columns: [GridItem(.adaptive(minimum: min(gridItemSize, givenWidth / minItems)), spacing: 0)],
+//                    spacing: 0) {
+//                        ForEach(items) {
+//                            item in
+//                            content(item).aspectRatio(aspectRatio, contentMode: .fit)
+//                        }
+//                    }
+////                or ScrollView
+//            } else {
+//                ScrollView {
+//                    LazyVGrid(columns: [GridItem(.adaptive(minimum: givenWidth / maxItems), spacing: 0)],
+//                    spacing: 0){
+//                        ForEach(items) {
+//                            item in
+//                            content(item).aspectRatio(aspectRatio, contentMode: .fit)
+//                        }
+//                    }
+//                }
+//            }
         }
     }
     

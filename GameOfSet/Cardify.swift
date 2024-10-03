@@ -21,7 +21,8 @@ struct Cardify: ViewModifier, Animatable {
         set { angle = newValue }
     }
     
-    var angle: Angle
+    @State var angle: Angle
+    
     let borderColor: Color
     let state: GameModel.Card.CardState
     
@@ -40,8 +41,7 @@ struct Cardify: ViewModifier, Animatable {
                 .foregroundStyle(.black)
                 .opacity(angle < .degrees(90) ? 0 : 1)
         }
-        .rotation3DEffect(angle, axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/
-        )
+        .rotation3DEffect(angle, axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/)
         
     }
     

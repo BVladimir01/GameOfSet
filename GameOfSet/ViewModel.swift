@@ -39,6 +39,9 @@ class SetViewModel: ObservableObject {
         game.id
     }
 
+    var chosenCards: [Card] {
+        game.chosenCards
+    }
 //    delegates intent from view to model
 //    delegates card choosing
     func chooseCard(_ card: Card) -> Bool {
@@ -57,7 +60,8 @@ class SetViewModel: ObservableObject {
     
 //    starts new game
     func newGame() {
-        game = GameModel()
+//        game = GameModel()
+        game.newGame()
     }
     
     struct Constants {

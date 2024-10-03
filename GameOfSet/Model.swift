@@ -46,9 +46,6 @@ struct GameModel: Equatable, Identifiable {
     
 //    cards that went out of the game
     var outOfGameCards: [Card]  = []
-//        allCards.filter { $0.state == .outOfGame }
-//            .sorted { $0.drawOrder < $1.drawOrder }
-//    }
     
 //    bool property ot check end of the deck
     var deckIsEmpty: Bool {
@@ -128,8 +125,6 @@ struct GameModel: Equatable, Identifiable {
                 allCards[card.id].state = .inGame
                 if i == 2 { break }
             }
-        } else {
-            
         }
     }
     
@@ -146,6 +141,25 @@ struct GameModel: Equatable, Identifiable {
         }
     }
 
+    
+    mutating func shuffle() {
+        let count = allCards.count
+        for (id, drawOrder) in ((0..<count).shuffled()).enumerated() {
+            allCards[id].drawOrder = drawOrder
+        }
+    }
+    
+    mutating func newGame() {
+        shuffle()
+        id += 1
+        let count = allCards.count
+        for id in 0..<count {
+            allCards[id].state = allCards[id].drawOrder < 12 ? .inGame : .inDeck
+            allCards[id].isMatched = .nonMatched
+            allCards[id].isChosen = false
+        }
+        outOfGameCards = []
+    }
     
 //    Card structure
     struct Card: Identifiable, Equatable {

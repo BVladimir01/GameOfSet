@@ -10,7 +10,8 @@ import SwiftUI
 struct ContentView: View {
     
     //    viewmodel
-    @ObservedObject var viewModel = SetViewModel()
+    @ObservedObject var viewModel: SetViewModel
+    
     //    simplicity
     typealias Card = GameModel.Card
     
@@ -26,18 +27,7 @@ struct ContentView: View {
                 CardView(card)
                     .padding(Constants.cardPadding)
                     .onTapGesture {
-                        var areMatched = false
-                        for (i, delay) in [0, 0, 0.15, 0.3].enumerated() {
-                            withAnimation(.easeInOut.delay(delay)) {
-                                if i == 0 {
-                                    areMatched = viewModel.chooseCard(card)
-                                } else {
-                                    if areMatched {
-                                        viewModel.addCard()
-                                    }
-                                }
-                            }
-                        }
+                        cardTap(on: card)
                     }
                     .matchedGeometryEffect(id: card.id, in: cardsView)
                     .transition(.asymmetric(insertion: .identity, removal: .identity))
@@ -45,34 +35,47 @@ struct ContentView: View {
 
             
             HStack {
-                if viewModel.deckIsEmpty { Rectangle().foregroundStyle(.clear).frame(width: 100, height: 150)}
-                CardDeckView(viewModel.inDeckCards.reversed(), aspectRatio: 2 / 3, gameId: viewModel.gameId) { card in
-                    CardView(card)
-                        .matchedGeometryEffect(id: card.id, in: cardsView, isSource: true)
-                        .transition(.asymmetric(insertion: .identity, removal: .identity))
-                        .onTapGesture {
-                            for delay in [0, 0.15, 0.3] {
-                                withAnimation(.easeInOut.delay(delay)) {
-                                    viewModel.addCard()
-                                }
+                if viewModel.deckIsEmpty { Rectangle().foregroundStyle(.clear).frame(width: 80, height: 120)}
+                else {
+                    CardDeckView(deckCards.reversed(), aspectRatio: 2 / 3, gameId: viewModel.gameId) { card in
+                        CardView(card)
+                            .matchedGeometryEffect(id: card.id, in: cardsView)
+                            .transition(.asymmetric(insertion: .identity, removal: .identity))
+                    }
+                    .onTapGesture {
+                        for delay in [0, 0.15, 0.3] {
+                            withAnimation(.easeInOut.delay(delay)) {
+                                viewModel.addCard()
                             }
                         }
+                    }
+                    .frame(width: 80, height: 120)
                 }
-                .frame(width: 80, height: 120)
                 Spacer()
-                CardDeckView(viewModel.outOfGameCards, aspectRatio: 2 / 3, gameId: viewModel.gameId) { card in
-                    CardView(card)
-                        .matchedGeometryEffect(id: card.id, in: cardsView)
-                        .transition(.asymmetric(insertion: .identity, removal: .identity))
+                
+                if viewModel.outOfGameCards.isEmpty {
+                    Rectangle().foregroundStyle(.clear).frame(width: 80, height: 120)
+                } else {
+                    CardDeckView(viewModel.outOfGameCards, aspectRatio: 2 / 3, gameId: viewModel.gameId) { card in
+                        CardView(card)
+                            .matchedGeometryEffect(id: card.id, in: cardsView)
+                            .transition(.asymmetric(insertion: .identity, removal: .identity))
+                    }
+                    .frame(width: 80, height: 120)
                 }
-                .frame(width: 80, height: 120)
+                
                 Spacer()
                 ZStack {
                     RoundedRectangle(cornerRadius: 5)
                         .fill(.white)
                         .strokeBorder(lineWidth: 3)
                         .frame(width: 80, height: 120)
-                    Button("New\nGame") { viewModel.newGame() }
+                    Button("New\nGame") {
+                        withAnimation {
+                            viewModel.newGame()
+                            deckCards = viewModel.inDeckCards
+                        }
+                    }
                         .font(.title)
                         .foregroundColor(.teal)
                 }
@@ -80,6 +83,32 @@ struct ContentView: View {
             .padding()
         }
     }
+    
+    @State private var deckCards: [Card]
+    
+    private func cardTap(on card: Card) {
+        var areMatched = false
+        for (i, delay) in [0, 0, 0.15, 0.3].enumerated() {
+            withAnimation(.easeInOut.delay(delay)) {
+                if i == 0 {
+                    areMatched = viewModel.chooseCard(card)
+                } else {
+                    if areMatched {
+                        viewModel.addCard()
+                        deckCards.remove(at: deckCards.index(before: deckCards.endIndex))
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    init() {
+        let viewModel = SetViewModel()
+        self.viewModel = viewModel
+        self.deckCards = viewModel.inDeckCards
+    }
+    
     
     //    contentview constants
     private struct Constants {

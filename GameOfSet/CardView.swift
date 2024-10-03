@@ -80,6 +80,7 @@ struct CardView: View {
 //    init sets the card
     init(_ card: Card) {
         self.card = card
+//        print(card.id)
     }
     
 //    cardview constants
