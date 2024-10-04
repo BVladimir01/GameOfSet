@@ -8,20 +8,14 @@
 import SwiftUI
 
 // Modifier that puts content into card with given border color
-struct Cardify: ViewModifier, Animatable {
+struct Cardify: ViewModifier {
+    
+    @Environment(\.cardAngle) var angle: Double
     
     init(borderColor: Color, state: GameModel.Card.CardState) {
-        angle =  (state != .inDeck) ? .zero : .degrees(180)
         self.borderColor = borderColor
         self.state = state
     }
-    
-    var animatableData: Angle {
-        get { angle }
-        set { angle = newValue }
-    }
-    
-    @State var angle: Angle
     
     let borderColor: Color
     let state: GameModel.Card.CardState
@@ -32,17 +26,16 @@ struct Cardify: ViewModifier, Animatable {
                 .fill(.white)
                 .strokeBorder(lineWidth: Constants.cardBorderWidth)
                 .foregroundStyle(borderColor)
-                .opacity(angle < .degrees(90) ? 1 : 0)
+                .opacity(angle < 90 ? 1 : 0)
             content
-                .opacity(angle < .degrees(90) ? 1 : 0)
+                .opacity(angle < 90 ? 1 : 0)
             RoundedRectangle(cornerRadius: Constants.cardCornerRadius)
                 .fill(.teal)
                 .strokeBorder(lineWidth: Constants.cardBorderWidth)
                 .foregroundStyle(.black)
-                .opacity(angle < .degrees(90) ? 0 : 1)
+                .opacity(angle < 90 ? 0 : 1)
         }
-        .rotation3DEffect(angle, axis: /*@START_MENU_TOKEN@*/(x: 0.0, y: 1.0, z: 0.0)/*@END_MENU_TOKEN@*/)
-        
+        .rotation3DEffect(.degrees(angle), axis: (x: 0.0, y: 1.0, z: 0.0))
     }
     
     private struct Constants {
@@ -51,3 +44,12 @@ struct Cardify: ViewModifier, Animatable {
         static let scaleFactor = 1.5
     }
 }
+
+
+
+extension View {
+    func cardify(borderColor: Color, state: GameModel.Card.CardState) -> some View {
+        self.modifier(Cardify(borderColor: borderColor, state: state))
+    }
+}
+

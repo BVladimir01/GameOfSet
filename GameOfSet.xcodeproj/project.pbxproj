@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E7A5265C2CAED0C10045555C /* TestCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A5265B2CAED0C10045555C /* TestCardView.swift */; };
+		E7A5265F2CAED1430045555C /* TestContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7A5265E2CAED1430045555C /* TestContentView.swift */; };
 		E7B36C182CA549E1007D925E /* Cardify.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7B36C172CA549E1007D925E /* Cardify.swift */; };
 		E7BFF0D72CA3E79D00CF1D20 /* GameOfSetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */; };
 		E7BFF0D92CA3E79D00CF1D20 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0D82CA3E79D00CF1D20 /* ContentView.swift */; };
@@ -17,10 +19,13 @@
 		E7BFF0EB2CA40CFE00CF1D20 /* BestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */; };
 		E7BFF0ED2CA498B200CF1D20 /* ShapeBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */; };
 		E7BFF0EF2CA49A7300CF1D20 /* CardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */; };
+		E7C6D4F62CAF334800F3EF91 /* MyTransitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7C6D4F52CAF334800F3EF91 /* MyTransitions.swift */; };
 		E7EA437C2CAA655200979B8B /* CardDeckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7EA437B2CAA655200979B8B /* CardDeckView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E7A5265B2CAED0C10045555C /* TestCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCardView.swift; sourceTree = "<group>"; };
+		E7A5265E2CAED1430045555C /* TestContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestContentView.swift; sourceTree = "<group>"; };
 		E7B36C172CA549E1007D925E /* Cardify.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cardify.swift; sourceTree = "<group>"; };
 		E7BFF0D32CA3E79D00CF1D20 /* GameOfSet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameOfSet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E7BFF0D62CA3E79D00CF1D20 /* GameOfSetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOfSetApp.swift; sourceTree = "<group>"; };
@@ -32,6 +37,7 @@
 		E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestView.swift; sourceTree = "<group>"; };
 		E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeBuilder.swift; sourceTree = SOURCE_ROOT; };
 		E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardView.swift; sourceTree = "<group>"; };
+		E7C6D4F52CAF334800F3EF91 /* MyTransitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MyTransitions.swift; path = Test/MyTransitions.swift; sourceTree = "<group>"; };
 		E7EA437B2CAA655200979B8B /* CardDeckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDeckView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -46,6 +52,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E7A5265D2CAED0F90045555C /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				E7A5265B2CAED0C10045555C /* TestCardView.swift */,
+				E7A5265E2CAED1430045555C /* TestContentView.swift */,
+			);
+			path = Test;
+			sourceTree = "<group>";
+		};
 		E7BFF0CA2CA3E79D00CF1D20 = {
 			isa = PBXGroup;
 			children = (
@@ -65,6 +80,7 @@
 		E7BFF0D52CA3E79D00CF1D20 /* GameOfSet */ = {
 			isa = PBXGroup;
 			children = (
+				E7C6D4F52CAF334800F3EF91 /* MyTransitions.swift */,
 				E7BFF0EC2CA498B200CF1D20 /* ShapeBuilder.swift */,
 				E7B36C172CA549E1007D925E /* Cardify.swift */,
 				E7BFF0EE2CA49A7300CF1D20 /* CardView.swift */,
@@ -74,6 +90,7 @@
 				E7BFF0EA2CA40CFE00CF1D20 /* BestView.swift */,
 				E7BFF0E82CA40AE100CF1D20 /* ViewModel.swift */,
 				E7BFF0E42CA3EB0000CF1D20 /* Model.swift */,
+				E7A5265D2CAED0F90045555C /* Test */,
 				E7BFF0DA2CA3E79E00CF1D20 /* Assets.xcassets */,
 				E7BFF0DC2CA3E79E00CF1D20 /* Preview Content */,
 			);
@@ -158,10 +175,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E7A5265F2CAED1430045555C /* TestContentView.swift in Sources */,
 				E7BFF0EF2CA49A7300CF1D20 /* CardView.swift in Sources */,
+				E7C6D4F62CAF334800F3EF91 /* MyTransitions.swift in Sources */,
 				E7BFF0E52CA3EB0000CF1D20 /* Model.swift in Sources */,
 				E7B36C182CA549E1007D925E /* Cardify.swift in Sources */,
 				E7BFF0ED2CA498B200CF1D20 /* ShapeBuilder.swift in Sources */,
+				E7A5265C2CAED0C10045555C /* TestCardView.swift in Sources */,
 				E7BFF0D92CA3E79D00CF1D20 /* ContentView.swift in Sources */,
 				E7BFF0E92CA40AE100CF1D20 /* ViewModel.swift in Sources */,
 				E7BFF0EB2CA40CFE00CF1D20 /* BestView.swift in Sources */,

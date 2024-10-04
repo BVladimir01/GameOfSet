@@ -53,9 +53,20 @@ class SetViewModel: ObservableObject {
         game.addCards()
     }
     
+    func dealCards() {
+        game.dealCards()
+    }
 //    delegates 3 card addition
     func addCard() {
         game.addCard()
+    }
+    
+    func flushCards() {
+        game.flushCards()
+    }
+    
+    func shuffleCards() {
+        game.shuffleCards()
     }
     
 //    starts new game
@@ -63,6 +74,7 @@ class SetViewModel: ObservableObject {
 //        game = GameModel()
         game.newGame()
     }
+    
     
     struct Constants {
         static let themeColor: Color = .teal

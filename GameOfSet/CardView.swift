@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CardView: View {
     
-    @Namespace var namespace
+    @Environment(\.cardAngle) var angle: Double
     
     @State var bounced = false
 //    simplicity
@@ -17,6 +17,7 @@ struct CardView: View {
     
 //    single property - copy of card it stores
     let card: Card
+//    let content: some View
     
 //    the body of view
     var body: some View {
@@ -25,16 +26,28 @@ struct CardView: View {
         let borderColor = borderColorChoser()
         let verticalOffsetPercentage = card.isMatched == .matched ? Constants.verticalOffset : 0
         let horizontalOFfsetPercentage = card.isMatched == .falslyMatched ? Constants.horizontalOffset : 0
-        
-        MultipleShapeBuilder(count: card.count,
-                             shape:card.shape,
-                             padding: Constants.shapePadding)
-        .addColorStrokePadding(color: color, opacity: opacity, linewidth: Constants.shapeBorderWidth, padding: Constants.shapeViewPadding)
-        .cardify(borderColor: borderColor, state: card.state)
+        ZStack {
+            RoundedRectangle(cornerRadius: Constants.cardCornerRadius)
+                .fill(.white)
+                .strokeBorder(lineWidth: Constants.cardBorderWidth)
+                .foregroundStyle(borderColor)
+                .opacity(angle < 90 ? 1 : 0)
+            MultipleShapeBuilder(count: card.count,
+                                 shape:card.shape,
+                                 padding: Constants.shapePadding)
+            .addColorStrokePadding(color: color, opacity: opacity, linewidth: Constants.shapeBorderWidth, padding: Constants.shapeViewPadding)
+                .opacity(angle < 90 ? 1 : 0)
+            RoundedRectangle(cornerRadius: Constants.cardCornerRadius)
+                .fill(.teal)
+                .strokeBorder(lineWidth: Constants.cardBorderWidth)
+                .foregroundStyle(.black)
+                .opacity(angle < 90 ? 0 : 1)
+        }
+        .rotation3DEffect(.degrees(angle), axis: (x: 0.0, y: 1.0, z: 0.0))
         .bouncing(offsetPercentage: verticalOffsetPercentage, trigger: card.isMatched == .matched)
-        .shaking(offsetPercentage: horizontalOFfsetPercentage, trigger: card.isMatched == .falslyMatched)        
+        .shaking(offsetPercentage: horizontalOFfsetPercentage, trigger: card.isMatched == .falslyMatched)
     }
-    
+
 //    decodes card textrue (opacity)
     func opacityChoser() -> Double{
         switch card.texture {
@@ -80,7 +93,7 @@ struct CardView: View {
 //    init sets the card
     init(_ card: Card) {
         self.card = card
-//        print(card.id)
+        
     }
     
 //    cardview constants
@@ -92,18 +105,15 @@ struct CardView: View {
         static let horizontalOffset = 0.01
         static let numBounces = 3
         static let damping = 0.8
+        static let cardCornerRadius = CGFloat(10)
+        static let cardBorderWidth = CGFloat(3)
+        static let scaleFactor = 1.5
     }
 }
 
 #Preview {
     CardView(GameModel.Card(shape: .two, color: .one, texture: .one, count: .two))
         .padding(20)
-}
-
-extension View {
-    func cardify(borderColor: Color, state: GameModel.Card.CardState) -> some View {
-        self.modifier(Cardify(borderColor: borderColor, state: state))
-    }
 }
 
 
@@ -157,5 +167,18 @@ extension Shape {
         self.fill(color.opacity(opacity))
             .stroke(color, lineWidth: linewidth)
             .padding(padding)
+    }
+}
+
+
+
+public struct cardAngleKey: EnvironmentKey {
+    public static let defaultValue: Double = 0
+}
+
+extension EnvironmentValues {
+    var cardAngle: Double {
+        get { return self[cardAngleKey.self] }
+        set { self[cardAngleKey.self] = newValue }
     }
 }

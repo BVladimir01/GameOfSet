@@ -38,10 +38,24 @@ struct CardDeckView<ItemView: View>: View  {
                     let coordAmp = Constants().coordAmplitude
                     let angleAmp = Constants().angleAmplitude
                     let randomTripple = randomTrippleFloat(for: card.id)
-                    content(card)
-                        .offset(x: CGFloat(randomTripple.x * coordAmp * intencity),
-                                y: CGFloat(randomTripple.y * coordAmp * intencity))
-                        .rotationEffect(.degrees(randomTripple.angle * angleAmp * intencity))
+                    let deckTransition: AnyTransition = if (card.state == .inDeck) {
+                        .rotateCard(card: card)
+                    } else {
+                        .asymmetric(insertion: .identity, removal: .rotateCard(card: card))
+//                        .rotateCard(card: card)
+                    }
+                    ZStack {
+                        content(card)
+                            .offset(x: CGFloat(randomTripple.x * coordAmp * intencity),
+                                    y: CGFloat(randomTripple.y * coordAmp * intencity))
+                            .rotationEffect(.degrees(randomTripple.angle * angleAmp * intencity))
+                    }
+//                    .zIndex(-Double(card.drawOrder))
+//                    .transition(.asymmetric(insertion: inTranstion, removal: outTransition))
+//                    .transition(.rotateCard(card: card))
+                    .transition(deckTransition)
+//                    .transition(.asymmetric(insertion: .identity, removal: .rotateCard(card: card)))
+//                    .transition(.asymmetric(insertion: .rotateCard(card: card), removal: .identity))
                 }
             }
         }

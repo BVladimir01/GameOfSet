@@ -140,7 +140,6 @@ struct GameModel: Equatable, Identifiable {
             allCards[card.id].state = .inGame
         }
     }
-
     
     mutating func shuffle() {
         let count = allCards.count
@@ -148,6 +147,33 @@ struct GameModel: Equatable, Identifiable {
             allCards[id].drawOrder = drawOrder
         }
     }
+    
+    mutating func flushCards() {
+        for card in inGameCards {
+            outOfGameCards.append(card)
+            allCards[card.id].state = .outOfGame
+        }
+    }
+    
+    mutating func shuffleCards() {
+        let count = allCards.count
+        for (id, drawOrder) in ((0..<count).shuffled()).enumerated() {
+            allCards[id].state = .inDeck
+            allCards[id].drawOrder = drawOrder
+        }
+        outOfGameCards = []
+    }
+    
+    mutating func dealCards() {
+        id += 1
+        let count = allCards.count
+        for id in 0..<count {
+            allCards[id].state = allCards[id].drawOrder < 12 ? .inGame : .inDeck
+            allCards[id].isMatched = .nonMatched
+            allCards[id].isChosen = false
+        }
+    }
+    
     
     mutating func newGame() {
         shuffle()
@@ -219,6 +245,19 @@ struct GameModel: Equatable, Identifiable {
             self.count = FieldOfThree(rawValue: Int(String(count))!)!
             self.id = Card.cardCount
             Card.cardCount += 1
+        }
+        
+        //debug init
+        init(shape: FieldOfThree, color: FieldOfThree, texture: FieldOfThree, count: FieldOfThree, state: CardState, isChosen: Bool, isMatched: MatchState, id: Int, drawOrder: Int) {
+            self.shape = shape
+            self.color = color
+            self.texture = texture
+            self.count = count
+            self.state = state
+            self.isChosen = isChosen
+            self.isMatched = isMatched
+            self.id = id
+            self.drawOrder = drawOrder
         }
         
 //        enum of cardstate
